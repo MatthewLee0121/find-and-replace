@@ -1,7 +1,7 @@
 counter = 0
 import sys
 import time
-def typing(message, delay = 0.1):
+def typing(message, delay = 0.07):
     for letter in message:
         sys.stdout.write(letter)
         sys.stdout.flush()
@@ -9,19 +9,37 @@ def typing(message, delay = 0.1):
     return " "
 #input boxes
 def inputs():
-  what_do = input(typing("""
+    global counter
+    counter = 0
+    what_do = input(typing("""
 1) Find and replace
 2) How many occurances  
 3) Copy the word lines to a new file
+0) Exit
 ....."""))
-  file_path = input(typing("please copy the file path "))
-  find = input(typing("What word do you want to find? "))
-  keep_lines = None
-  if what_do == "3":
-      keep_lines = input(typing("do you want to keep the original lines? "))
-  return what_do, file_path, find, keep_lines
+    if what_do == "0":
+      typing("Exiting the programme, Thank you :)")
+      raise SystemExit
 
-def find_and_replace():
+    file_path = input(typing("please copy the file path "))
+    find = input(typing("What word do you want to find? "))
+    keep_lines = None
+
+    if what_do == '1':
+      replace = input(typing("What word do you want to replace it with? "))
+      find_and_replace(file_path, find, replace)
+    elif what_do == '2':
+      how_many(file_path, find)
+    elif what_do == '3':
+      keep_lines = input(typing("do you want to keep the original lines? "))
+      new_file_created = copy_lines_to_new(file_path, find, keep_lines)
+      typing(f"New file: {new_file_created}")
+    else:
+      typing("Choose again")
+
+    return what_do, file_path, find, keep_lines
+
+def find_and_replace(file_path, find, replace):
   global counter
 # Read the file content    
   with open(file_path, 'r') as file:
@@ -43,7 +61,7 @@ def find_and_replace():
     typing(f"{counter} Occurrences of '{find}' replaced with '{replace}' in the file.")
 
 
-def how_many():
+def how_many(file_path, find):
     global counter
     with open(file_path, 'r') as file:
         content = file.read()
@@ -61,8 +79,7 @@ def copy_lines_to_new(file_path, find_word, keep_lines):
     if keep_lines[0] == "n":
         lines_with_word = [line for line in lines if find_word in line]
     else:
-        lines_with_word = [line for line in lines if find_word in line]
-        lines_without_word = [line + '\n' if find_word not in line else line for line in lines]
+        lines_without_word = [line if find_word in line else "No match \n" for line in lines]
 
     # Opens the new file and writes the lines to it
     with open(new_file_path, 'w') as new_file:
@@ -73,16 +90,7 @@ def copy_lines_to_new(file_path, find_word, keep_lines):
 
     return new_file_path
 
-
 what_do, file_path, find, keep_lines = inputs()
 
-if what_do == '1':
-    replace = input(typing("What word do you want to replace it with? "))
-    find_and_replace()
-elif what_do == '2':
-    how_many()
-elif what_do == '3':
-    new_file_created = copy_lines_to_new(file_path, find, keep_lines)
-    typing(f"New file: {new_file_created}")
-else:
-    typing("Choose again")
+if what_do != "0":
+   what_do, file_path, find, keep_lines = inputs()
