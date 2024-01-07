@@ -21,7 +21,7 @@ def inputs():
       typing("Exiting the programme, Thank you :)")
       raise SystemExit
 
-    file_path = input(typing("please copy the file path "))
+    file_path = input(typing("Please copy the file path. "))
     find = input(typing("What word do you want to find? "))
     keep_lines = None
 
@@ -31,7 +31,7 @@ def inputs():
     elif what_do == '2':
       how_many(file_path, find)
     elif what_do == '3':
-      keep_lines = input(typing("do you want to keep the original lines? "))
+      keep_lines = input(typing("Do you want to keep the original lines? "))
       new_file_created = copy_lines_to_new(file_path, find, keep_lines)
       typing(f"New file: {new_file_created}")
     else:
