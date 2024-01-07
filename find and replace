@@ -1,0 +1,76 @@
+counter = 0
+#input boxes
+def inputs():
+  what_do = input("""
+                  1)find and replace
+                  2) how many occurances  
+                  3) copy the word lines to a new file
+                  """)
+  file_path = input("please copy the file path ")
+  find = input("What word do you want to find? ")
+  keep_lines = None
+  if what_do = "3":
+      keep_lines = input("do you want to keep the original lines? ")
+  return what_do, file_path, find, keep_lines
+
+def find_and_replace():
+  global counter
+# Read the file content    
+  with open(file_path, 'r') as file:
+    lines = file.readlines()
+
+# Process each line and perform replacement
+  for i in range(len(lines)):
+      if find in lines[i]:
+          counter += 1
+          # Replace the word in the line
+          lines[i] = lines[i].replace(find, replace)
+
+# Write the updated content back to the file
+  with open(file_path, 'w') as file:
+      file.writelines(lines)
+
+  print(f"{counter} Occurrences of '{find}' replaced with '{replace}' in the file.")
+
+
+def how_many():
+    global counter
+    with open(file_path, 'r') as file:
+        content = file.read()
+        counter = content.count(find)
+        
+    print(f"Total occurrences of '{find}' in the file: {counter}")
+
+def copy_lines_to_new(file_path, find_word, keep_lines):
+    #define new file path to be in the find and replace folder
+    new_file_path = rf"C:\Users\matty\python projects\find and replace folder\lines_with_{find_word}"
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    lines_with_word = [line for line in lines if find_word in line]
+    lines_without_word =  ["n/" for line in lines if find_word not in line]
+#opens the new file and writes the lines to it
+    with open(new_file_path, 'w') as new_file:
+        if keep_lines[0] == "n":
+          new_file.writelines(lines_with_word)
+        else:
+          new_file.writelines(lines_with_word + lines_without_word)
+
+    return new_file_path
+
+what_do, file_path, find, keep_lines = inputs()
+
+if what_do == '1':
+    replace = input("What word do you want to replace it with? ")
+    find_and_replace()
+elif what_do == '2':
+    how_many()
+elif what_do == '3':
+    new_file_created = copy_lines_to_new(file_path, find, keep_lines)
+    print(f"New file: {new_file_created}")
+else:
+    print("Choose again")
+
+
+    #C:\Users\matty\python projects\find and replace folder
+    #C:\Users\matty\python projects\find and replace folder\find and replace
